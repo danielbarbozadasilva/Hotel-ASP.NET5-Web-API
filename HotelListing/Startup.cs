@@ -1,5 +1,7 @@
 using HotelListing.Configurations;
 using HotelListing.Data;
+using HotelListing.IRepository;
+using HotelListing.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +24,11 @@ namespace HotelListing
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<DatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
+
             services.AddCors(o =>
             {
                 o.AddPolicy("AllowAll", builder =>
@@ -32,12 +36,20 @@ namespace HotelListing
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
+
             services.AddAutoMapper(typeof(MapperInitilizer));
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HotelListing", Version = "v1" });
             });
-            services.AddControllers();
+
+            services.AddControllers().AddNewtonsoftJson(op =>
+                op.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +64,9 @@ namespace HotelListing
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelListing v1"));
 
             app.UseHttpsRedirection();
+
             app.UseCors("AllowAll");
+
             app.UseRouting();
 
             app.UseAuthorization();

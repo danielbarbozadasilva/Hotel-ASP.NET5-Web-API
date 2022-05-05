@@ -1,15 +1,13 @@
 ﻿using HotelListing.Data;
-using HotelListing.IRepository;
+using System;
 using System.Threading.Tasks;
 
-namespace HotelListing.Repository
+namespace HotelListing.IRepository
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         IGenericRepository<Country> Countries { get; }
-
         IGenericRepository<Hotel> Hotels { get; }
-
         Task Save();
     }
 }

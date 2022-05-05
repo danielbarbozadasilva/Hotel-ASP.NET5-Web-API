@@ -17,7 +17,7 @@ namespace HotelListing.Repository
         public GenericRepository(DatabaseContext context)
         {
             _context = context;
-            _db = context.Set<T>();
+            _db = _context.Set<T>();
         }
 
         public async Task Delete(int id)
@@ -41,12 +41,14 @@ namespace HotelListing.Repository
                     query = query.Include(includePropery);
                 }
             }
+
             return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
 
         public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<string> includes = null)
         {
             IQueryable<T> query = _db;
+
             if (expression != null)
             {
                 query = query.Where(expression);
@@ -66,7 +68,6 @@ namespace HotelListing.Repository
             }
 
             return await query.AsNoTracking().ToListAsync();
-
         }
 
         public async Task Insert(T entity)

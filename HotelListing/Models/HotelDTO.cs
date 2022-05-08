@@ -6,7 +6,7 @@ namespace HotelListing.Models
     public class CreateHotelDTO
     {
         [Required]
-        [StringLength(maximumLength: 150, ErrorMessage = "Hotel Name Is Too Long")]
+        [StringLength(maximumLength: 150, ErrorMessage = "Name Is Too Long")]
         public string Name { get; set; }
 
         [Required]

@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace HotelListing.Controllers
 {
-    [ApiVersion("2.0")]
+    [ApiVersion("2.0", Deprecated = true)]
     [Route("api/country")]
     [ApiController]
-    public class ContryV2Controller : ControllerBase
+    public class CountryV2Controller : ControllerBase
     {
         private DatabaseContext _context;
 
-        public ContryV2Controller(DatabaseContext context)
+        public CountryV2Controller(DatabaseContext context)
         {
             _context = context;
         }
